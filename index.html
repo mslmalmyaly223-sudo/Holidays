@@ -1,0 +1,2256 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>اخبار العطل</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* منع التحديد والنص */
+        * {
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            -khtml-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+            box-sizing: border-box;
+        }
+        
+        /* منع التكبير والتصغير */
+        html, body {
+            overflow: hidden;
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            touch-action: pan-y;
+        }
+        
+        /* تصميم عام */
+        body {
+            font-family: 'Tajawal', 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #0c2461 0%, #1e3799 30%, #4a69bd 100%);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            position: relative;
+        }
+        
+        /* رأس الصفحة */
+        .header {
+            background: linear-gradient(90deg, #1e3c72 0%, #2a5298 100%);
+            padding: 15px 20px;
+            text-align: center;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+            position: relative;
+            z-index: 1000;
+            border-bottom: 3px solid #ffd32a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            flex-shrink: 0;
+        }
+        
+        .header-buttons {
+            display: flex;
+            gap: 15px;
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        
+        .app-title {
+            font-size: 32px;
+            font-weight: 900;
+            background: linear-gradient(to right, #ffd32a, #ff9f1a);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin: 0;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+            letter-spacing: 1px;
+            text-align: center;
+        }
+        
+        .app-subtitle {
+            font-size: 14px;
+            color: #a4b0be;
+            margin-top: 5px;
+            font-weight: 300;
+            text-align: center;
+            width: 100%;
+        }
+        
+        /* أزرار الرأس */
+        .header-btn {
+            background: linear-gradient(45deg, #1e90ff, #3742fa);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 6px 15px rgba(30, 144, 255, 0.5);
+            transition: all 0.3s;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            min-width: 140px;
+            justify-content: center;
+            white-space: nowrap;
+        }
+        
+        .logout-btn {
+            background: linear-gradient(45deg, #ff4757, #ff3838);
+            box-shadow: 0 6px 15px rgba(255, 71, 87, 0.5);
+        }
+        
+        .header-btn:hover {
+            transform: translateY(-2px) scale(1.05);
+            box-shadow: 0 8px 20px rgba(30, 144, 255, 0.7);
+        }
+        
+        .logout-btn:hover {
+            box-shadow: 0 8px 20px rgba(255, 71, 87, 0.7);
+        }
+        
+        /* زر حفظ التحديثات */
+        .save-btn {
+            background: linear-gradient(45deg, #2ed573, #1dd1a1);
+            color: white;
+            border: none;
+            padding: 15px 35px;
+            border-radius: 30px;
+            font-weight: bold;
+            font-size: 18px;
+            cursor: pointer;
+            box-shadow: 0 8px 20px rgba(46, 213, 115, 0.5);
+            margin: 15px auto;
+            display: block;
+            transition: all 0.3s;
+            position: relative;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            min-width: 250px;
+        }
+        
+        .save-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 25px rgba(46, 213, 115, 0.7);
+        }
+        
+        .save-btn.pulse {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(46, 213, 115, 0.7); }
+            70% { box-shadow: 0 0 0 15px rgba(46, 213, 115, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(46, 213, 115, 0); }
+        }
+        
+        /* زر تحديث العطل */
+        .refresh-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(45deg, #9c88ff, #8c7ae6);
+            border-radius: 50%;
+            border: none;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+            box-shadow: 0 6px 15px rgba(156, 136, 255, 0.5);
+            z-index: 1001;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+            display: none;
+        }
+        
+        .refresh-btn:hover {
+            transform: scale(1.1) translateY(-2px);
+            box-shadow: 0 10px 20px rgba(156, 136, 255, 0.7);
+            animation: rotate 0.5s linear;
+        }
+        
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        
+        /* منطقة تسجيل الدخول */
+        .login-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #0c2461 0%, #1e3799 100%);
+            padding: 20px;
+            position: relative;
+        }
+        
+        .login-box {
+            background: rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(15px);
+            padding: 40px 35px;
+            border-radius: 25px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+            width: 100%;
+            max-width: 450px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            margin-bottom: 80px;
+        }
+        
+        .login-title {
+            font-size: 32px;
+            margin-bottom: 10px;
+            color: #ffd32a;
+            text-shadow: 0 2px 10px rgba(255, 211, 42, 0.5);
+        }
+        
+        .login-subtitle {
+            color: #a4b0be;
+            margin-bottom: 30px;
+            font-size: 16px;
+        }
+        
+        .input-group {
+            margin-bottom: 25px;
+            text-align: right;
+        }
+        
+        .input-group label {
+            display: block;
+            margin-bottom: 10px;
+            color: #dfe4ea;
+            font-weight: 600;
+            font-size: 16px;
+            text-align: right;
+            padding-right: 5px;
+        }
+        
+        .input-group input {
+            width: 100%;
+            padding: 18px 20px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
+            background: rgba(255, 255, 255, 0.08);
+            color: white;
+            font-size: 17px;
+            transition: all 0.3s;
+            font-family: 'Tajawal', sans-serif;
+        }
+        
+        .input-group input:focus {
+            outline: none;
+            border-color: #1e90ff;
+            background: rgba(255, 255, 255, 0.12);
+            box-shadow: 0 0 0 3px rgba(30, 144, 255, 0.2);
+        }
+        
+        .input-group input::placeholder {
+            color: #a4b0be;
+            font-size: 15px;
+        }
+        
+        /* زر تسجيل الدخول الصغير */
+        .login-btn-small {
+            background: linear-gradient(45deg, #3742fa, #5352ed);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 15px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 10px rgba(55, 66, 250, 0.5);
+            font-family: 'Tajawal', sans-serif;
+            letter-spacing: 0.5px;
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            opacity: 0.7;
+            z-index: 100;
+        }
+        
+        .login-btn-small:hover {
+            opacity: 1;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(55, 66, 250, 0.7);
+        }
+        
+        .login-btn {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(45deg, #3742fa, #5352ed);
+            color: white;
+            border: none;
+            border-radius: 15px;
+            font-size: 19px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: all 0.3s;
+            box-shadow: 0 8px 20px rgba(55, 66, 250, 0.5);
+            font-family: 'Tajawal', sans-serif;
+            letter-spacing: 0.5px;
+        }
+        
+        .login-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 25px rgba(55, 66, 250, 0.7);
+            background: linear-gradient(45deg, #2f3542, #3742fa);
+        }
+        
+        .auto-fill-btn {
+            background: linear-gradient(45deg, #ff9f1a, #ffaf40);
+            margin-top: 20px;
+        }
+        
+        .auto-fill-btn:hover {
+            background: linear-gradient(45deg, #e67e22, #ff9f1a);
+        }
+        
+        .create-account-btn {
+            background: linear-gradient(45deg, #2ed573, #26de81);
+            margin-top: 15px;
+        }
+        
+        .create-account-btn:hover {
+            background: linear-gradient(45deg, #20bf6b, #2ed573);
+        }
+        
+        /* منطقة المحافظات */
+        .provinces-container {
+            flex: 1;
+            overflow-y: auto;
+            padding: 15px 20px;
+            padding-bottom: 90px;
+            -webkit-overflow-scrolling: touch;
+            scroll-behavior: smooth;
+            position: relative;
+            height: calc(100vh - 140px);
+        }
+        
+        .provinces-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 20px;
+            padding-bottom: 20px;
+            min-height: min-content;
+        }
+        
+        /* تصميم بطاقة المحافظة */
+        .province-card {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.05));
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            position: relative;
+            min-height: 85px;
+            overflow: hidden;
+        }
+        
+        .province-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #ffd32a, #ff9f1a);
+            border-radius: 20px 20px 0 0;
+        }
+        
+        .province-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.1));
+        }
+        
+        .province-card.favorite {
+            background: linear-gradient(135deg, rgba(255, 211, 42, 0.25), rgba(255, 159, 26, 0.15));
+            border-color: rgba(255, 211, 42, 0.4);
+            box-shadow: 0 10px 25px rgba(255, 211, 42, 0.3);
+        }
+        
+        .province-card.favorite::before {
+            background: linear-gradient(90deg, #ff9f1a, #ffd32a);
+        }
+        
+        .province-name {
+            font-size: 22px;
+            font-weight: 800;
+            color: #ffffff;
+            flex-grow: 1;
+            text-align: right;
+            padding-right: 15px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+            letter-spacing: 0.5px;
+        }
+        
+        /* زر المفضلة */
+        .favorite-btn {
+            background: rgba(255, 211, 42, 0.2);
+            border: 2px solid rgba(255, 211, 42, 0.5);
+            color: #ffd32a;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            font-size: 20px;
+            cursor: pointer;
+            margin-left: 12px;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .favorite-btn:hover {
+            transform: scale(1.15) rotate(5deg);
+            background: rgba(255, 211, 42, 0.3);
+            box-shadow: 0 0 20px rgba(255, 211, 42, 0.5);
+        }
+        
+        .favorite-btn.active {
+            background: #ffd32a;
+            color: #2f3542;
+            border-color: #ffd32a;
+            box-shadow: 0 0 25px rgba(255, 211, 42, 0.7);
+        }
+        
+        /* زر الحالة - حجم أصغر */
+        .status-btn {
+            background: rgba(255, 255, 255, 0.15);
+            border: 2px solid rgba(255, 255, 255, 0.25);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            min-width: 100px;
+            max-width: 120px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-right: 8px;
+            position: relative;
+            z-index: 2;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            flex-shrink: 0;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+        
+        .status-btn:hover {
+            background: rgba(255, 255, 255, 0.25);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .status-btn.owner {
+            cursor: pointer;
+        }
+        
+        .status-btn.user {
+            cursor: default;
+        }
+        
+        /* القائمة المنسدلة للحالة - محسنة للسحب */
+        .status-dropdown {
+            position: fixed;
+            background: rgba(20, 25, 30, 0.98);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 0;
+            z-index: 10000;
+            width: 300px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.8);
+            border: 2px solid rgba(255, 255, 255, 0.15);
+            display: none;
+            max-height: 70vh;
+            overflow: hidden;
+            opacity: 1;
+            transform: none;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        
+        .status-dropdown-header {
+            text-align: center;
+            padding: 15px;
+            margin: 0;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+            font-weight: bold;
+            color: #ffd32a;
+            font-size: 18px;
+            background: rgba(0, 0, 0, 0.2);
+            position: sticky;
+            top: 0;
+            z-index: 2;
+        }
+        
+        .status-options-container {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+            max-height: calc(70vh - 60px);
+            overflow-y: auto;
+            padding-right: 0;
+            -webkit-overflow-scrolling: touch;
+            scroll-behavior: smooth;
+        }
+        
+        .status-options-container::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        .status-options-container::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 4px;
+        }
+        
+        .status-options-container::-webkit-scrollbar-thumb {
+            background: linear-gradient(45deg, #ffd32a, #ff9f1a);
+            border-radius: 4px;
+        }
+        
+        .status-options-container::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(45deg, #ff9f1a, #ffd32a);
+        }
+        
+        .status-option {
+            padding: 14px 20px;
+            color: white;
+            cursor: pointer;
+            border-radius: 0;
+            transition: all 0.2s;
+            text-align: center;
+            font-weight: 500;
+            border: none;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            position: relative;
+            overflow: hidden;
+            min-height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .status-option:last-child {
+            border-bottom: none;
+        }
+        
+        .status-option::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 5px;
+            height: 100%;
+        }
+        
+        .status-option:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: none;
+            border-color: transparent;
+        }
+        
+        .status-option:active {
+            background: rgba(255, 255, 255, 0.15);
+        }
+        
+        /* ألوان الحالات */
+        .status-0 { color: #2ed573; } .status-option.status-0::before { background: #2ed573; }
+        .status-1 { color: #ff9f1a; } .status-option.status-1::before { background: #ff9f1a; }
+        .status-2 { color: #1e90ff; } .status-option.status-2::before { background: #1e90ff; }
+        .status-3 { color: #ff4757; } .status-option.status-3::before { background: #ff4757; }
+        .status-4 { color: #9c88ff; } .status-option.status-4::before { background: #9c88ff; }
+        .status-5 { color: #8c7ae6; } .status-option.status-5::before { background: #8c7ae6; }
+        .status-6 { color: #7158e2; } .status-option.status-6::before { background: #7158e2; }
+        .status-7 { color: #4b7bec; } .status-option.status-7::before { background: #4b7bec; }
+        .status-8 { color: #3498db; } .status-option.status-8::before { background: #3498db; }
+        .status-9 { color: #1abc9c; } .status-option.status-9::before { background: #1abc9c; }
+        .status-10 { color: #27ae60; } .status-option.status-10::before { background: #27ae60; }
+        .status-11 { color: #44bd32; } .status-option.status-11::before { background: #44bd32; }
+        .status-12 { color: #78e08f; } .status-option.status-12::before { background: #78e08f; }
+        .status-13 { color: #badc58; } .status-option.status-13::before { background: #badc58; }
+        
+        /* تذييل الصفحة */
+        .footer {
+            background: linear-gradient(90deg, #1e3c72 0%, #2a5298 100%);
+            padding: 20px;
+            text-align: center;
+            font-size: 15px;
+            color: #a4b0be;
+            border-top: 3px solid #ffd32a;
+            position: relative;
+            z-index: 1000;
+            flex-shrink: 0;
+        }
+        
+        /* رسالة التحميل */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #0c2461 0%, #1e3799 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+            backdrop-filter: blur(10px);
+        }
+        
+        .loading-spinner {
+            width: 80px;
+            height: 80px;
+            border: 6px solid rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            border-top-color: #ffd32a;
+            animation: spin 1s ease-in-out infinite;
+            margin-bottom: 25px;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .loading-text {
+            font-size: 28px;
+            color: #ffd32a;
+            font-weight: bold;
+            text-shadow: 0 2px 10px rgba(255, 211, 42, 0.5);
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        
+        .loading-subtitle {
+            font-size: 18px;
+            color: #a4b0be;
+            text-align: center;
+        }
+        
+        /* رسالة تنبيه - وسط الشاشة */
+        .alert-notification {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.8);
+            padding: 25px 40px;
+            background: rgba(30, 39, 46, 0.95);
+            color: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8);
+            z-index: 10000;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            max-width: 450px;
+            border: 2px solid;
+            opacity: 0;
+            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            backdrop-filter: blur(15px);
+            text-align: center;
+        }
+        
+        .alert-notification.show {
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1);
+        }
+        
+        .alert-notification.success { border-color: #2ed573; }
+        .alert-notification.error { border-color: #ff4757; }
+        .alert-notification.warning { border-color: #ff9f1a; }
+        .alert-notification.info { border-color: #1e90ff; }
+        
+        .alert-icon {
+            font-size: 28px;
+            flex-shrink: 0;
+        }
+        
+        .alert-content {
+            flex: 1;
+        }
+        
+        /* زر العودة للأعلى */
+        .scroll-top-btn {
+            position: fixed;
+            bottom: 100px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(45deg, #3742fa, #5352ed);
+            border-radius: 50%;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: 0 10px 25px rgba(55, 66, 250, 0.5);
+            z-index: 999;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+        
+        .scroll-top-btn:hover {
+            transform: scale(1.1) translateY(-5px);
+            box-shadow: 0 15px 30px rgba(55, 66, 250, 0.7);
+        }
+        
+        /* تحسين المظهر على الشاشات الصغيرة */
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                padding: 15px 10px;
+                gap: 10px;
+            }
+            
+            .header-buttons {
+                position: relative;
+                top: 0;
+                left: 0;
+                transform: none;
+                margin-bottom: 10px;
+                justify-content: center;
+                width: 100%;
+            }
+            
+            .header-btn {
+                min-width: 120px;
+                padding: 8px 15px;
+                font-size: 14px;
+            }
+            
+            .app-title {
+                font-size: 26px;
+            }
+            
+            .refresh-btn {
+                top: 10px;
+                right: 10px;
+                width: 45px;
+                height: 45px;
+                font-size: 18px;
+            }
+            
+            .provinces-grid {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+            
+            .province-card {
+                flex-direction: row;
+                text-align: right;
+                padding: 15px;
+                gap: 10px;
+                min-height: 80px;
+            }
+            
+            .status-btn {
+                margin: 0;
+                width: auto;
+                max-width: 110px;
+                min-width: 90px;
+                padding: 7px 12px;
+                font-size: 13px;
+            }
+            
+            .favorite-btn {
+                position: relative;
+                top: 0;
+                left: 0;
+                margin: 0 0 0 10px;
+                width: 40px;
+                height: 40px;
+                font-size: 18px;
+            }
+            
+            .province-name {
+                padding-right: 0;
+                margin-top: 0;
+                font-size: 20px;
+            }
+            
+            .save-btn {
+                min-width: 200px;
+                padding: 12px 25px;
+                font-size: 16px;
+            }
+            
+            .status-dropdown {
+                width: 90%;
+                max-height: 80vh;
+                left: 5% !important;
+                right: 5% !important;
+                top: 50% !important;
+                transform: translate(-50%, -50%) !important;
+            }
+            
+            .status-options-container {
+                max-height: calc(80vh - 60px);
+            }
+            
+            .alert-notification {
+                width: 90%;
+                padding: 20px 25px;
+            }
+            
+            .loading-text {
+                font-size: 24px;
+            }
+            
+            .loading-subtitle {
+                font-size: 16px;
+            }
+            
+            .scroll-top-btn {
+                bottom: 90px;
+                right: 20px;
+                width: 55px;
+                height: 55px;
+            }
+            
+            .provinces-container {
+                height: calc(100vh - 130px);
+            }
+            
+            .login-box {
+                margin-bottom: 100px;
+                padding: 30px 25px;
+            }
+            
+            .login-btn-small {
+                bottom: 15px;
+                right: 15px;
+                padding: 8px 16px;
+                font-size: 13px;
+            }
+        }
+        
+        /* تحسين للشاشات المتوسطة (تابلت) */
+        @media (min-width: 769px) and (max-width: 1024px) {
+            .provinces-grid {
+                grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            }
+            
+            .province-card {
+                padding: 20px;
+            }
+            
+            .status-btn {
+                min-width: 110px;
+                max-width: 130px;
+                padding: 9px 15px;
+                font-size: 14px;
+            }
+            
+            .status-dropdown {
+                width: 320px;
+            }
+        }
+        
+        /* تحسين للشاشات الكبيرة (كمبيوتر) */
+        @media (min-width: 1025px) {
+            .provinces-grid {
+                grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+                gap: 25px;
+            }
+            
+            .province-card {
+                padding: 20px;
+            }
+            
+            .status-dropdown {
+                width: 350px;
+            }
+            
+            .status-option {
+                padding: 16px 25px;
+            }
+        }
+        
+        /* شريط التمرير المخصص */
+        .provinces-container::-webkit-scrollbar {
+            width: 12px;
+        }
+        
+        .provinces-container::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+        }
+        
+        .provinces-container::-webkit-scrollbar-thumb {
+            background: linear-gradient(45deg, #ffd32a, #ff9f1a);
+            border-radius: 10px;
+            border: 2px solid rgba(0, 0, 0, 0.2);
+        }
+        
+        .provinces-container::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(45deg, #ff9f1a, #ffd32a);
+        }
+        
+        /* تحسين التمرير */
+        .provinces-container {
+            overscroll-behavior: contain;
+            -webkit-overflow-scrolling: touch;
+            scroll-behavior: smooth;
+            overflow-anchor: none;
+        }
+        
+        /* تحسين الأداء */
+        .province-card {
+            will-change: transform;
+        }
+        
+        /* رسائل تسجيل الدخول */
+        .login-message {
+            padding: 15px;
+            margin-top: 20px;
+            border-radius: 12px;
+            font-weight: 600;
+            text-align: center;
+            display: none;
+        }
+        
+        .login-message.error {
+            background: rgba(255, 71, 87, 0.15);
+            color: #ff6b81;
+            border: 2px solid rgba(255, 71, 87, 0.3);
+        }
+        
+        .login-message.success {
+            background: rgba(46, 213, 115, 0.15);
+            color: #7bed9f;
+            border: 2px solid rgba(46, 213, 115, 0.3);
+        }
+        
+        /* منع النسخ */
+        body {
+            -webkit-user-drag: none;
+        }
+        
+        img, a {
+            -webkit-user-drag: none;
+        }
+        
+        /* تحسين للأجهزة التي تدعم hover */
+        @media (hover: hover) {
+            .status-option:hover {
+                background: rgba(255, 255, 255, 0.1);
+            }
+        }
+        
+        /* تحسين للشاشات العريضة */
+        @media (min-width: 1200px) {
+            .provinces-grid {
+                grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+            }
+        }
+        
+        /* تحسين للأيباد في الوضع الأفقي */
+        @media (min-width: 768px) and (max-width: 1024px) and (orientation: landscape) {
+            .provinces-grid {
+                grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            }
+            
+            .province-card {
+                min-height: 75px;
+                padding: 15px;
+            }
+            
+            .status-btn {
+                min-width: 100px;
+                max-width: 115px;
+            }
+        }
+        
+        /* تحسين للهواتف في الوضع الأفقي */
+        @media (max-width: 767px) and (orientation: landscape) {
+            .login-box {
+                margin-bottom: 100px;
+                max-height: 90vh;
+                overflow-y: auto;
+            }
+            
+            .provinces-grid {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            }
+            
+            .province-card {
+                min-height: 70px;
+                padding: 12px;
+            }
+            
+            .province-name {
+                font-size: 18px;
+            }
+            
+            .status-btn {
+                min-width: 85px;
+                max-width: 100px;
+                padding: 6px 10px;
+                font-size: 12px;
+            }
+        }
+    </style>
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+    <!-- خط عربي -->
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- شاشة التسجيل/إنشاء حساب -->
+    <div id="loginScreen" class="login-container">
+        <div class="login-box">
+            <h1 class="login-title">اخبار العطل</h1>
+            <p class="login-subtitle">تابع حالة العطل في جميع المحافظات العراقية</p>
+            
+            <div class="input-group">
+                <label for="email"><i class="fas fa-envelope"></i> البريد الإلكتروني</label>
+                <input type="email" id="email" placeholder="أدخل بريدك الإلكتروني">
+            </div>
+            
+            <div class="input-group">
+                <label for="password"><i class="fas fa-lock"></i> كلمة المرور</label>
+                <input type="password" id="password" placeholder="أدخل كلمة المرور (6 أحرف على الأقل)">
+            </div>
+            
+            <button id="createAccountBtn" class="login-btn create-account-btn">
+                <i class="fas fa-user-plus"></i> إنشاء حساب جديد
+            </button>
+            
+            <button id="autoFillBtn" class="login-btn auto-fill-btn">
+                <i class="fas fa-magic"></i> الملئ التلقائي
+            </button>
+            
+            <div id="loginMessage" class="login-message"></div>
+        </div>
+        
+        <!-- زر تسجيل الدخول الصغير في الأسفل -->
+        <button id="loginBtnSmall" class="login-btn-small">
+            <i class="fas fa-sign-in-alt"></i> تسجيل الدخول
+        </button>
+    </div>
+
+    <!-- شاشة التطبيق الرئيسية -->
+    <div id="appScreen" style="display: none; height: 100vh; overflow: hidden;">
+        <!-- الرأس -->
+        <div class="header">
+            <div class="header-buttons">
+                <button class="header-btn kufa-btn" onclick="window.open('https://t.me/+wIPBqDdVU8s5OWFi', '_blank')">
+                    <i class="fab fa-telegram"></i> ابن الكوفة
+                </button>
+                <button class="header-btn logout-btn" id="logoutBtn">
+                    <i class="fas fa-sign-out-alt"></i> تسجيل خروج
+                </button>
+            </div>
+            <div class="header-content">
+                <h1 class="app-title">اخبار العطل</h1>
+                <div class="app-subtitle">تحديثات لحظية لحالة العطل في المحافظات</div>
+            </div>
+            <button id="refreshBtn" class="refresh-btn" title="تحديث العطل">
+                <i class="fas fa-sync-alt"></i>
+            </button>
+        </div>
+
+        <!-- زر حفظ التحديثات (للمالك فقط) -->
+        <button id="saveBtn" class="save-btn" style="display: none;">
+            <i class="fas fa-save"></i> حفظ التحديثات
+        </button>
+
+        <!-- منطقة المحافظات -->
+        <div class="provinces-container" id="provincesContainer">
+            <div class="provinces-grid" id="provincesGrid">
+                <!-- سيتم إضافة المحافظات هنا بواسطة JavaScript -->
+            </div>
+        </div>
+
+        <!-- زر العودة للأعلى -->
+        <button id="scrollTopBtn" class="scroll-top-btn">
+            <i class="fas fa-arrow-up"></i>
+        </button>
+
+        <!-- التذييل -->
+        <div class="footer">
+            <p>تطبيق اخبار العطل © 2024 - جميع الحقوق محفوظة</p>
+        </div>
+    </div>
+
+    <!-- رسالة التحميل -->
+    <div id="loadingOverlay" class="loading-overlay" style="display: none;">
+        <div class="loading-spinner"></div>
+        <div class="loading-text" id="loadingText">جاري تحميل العطل</div>
+        <div class="loading-subtitle" id="loadingSubtitle">يرجى الانتظار...</div>
+    </div>
+
+    <!-- رسالة تنبيه -->
+    <div id="alertNotification" class="alert-notification">
+        <div class="alert-icon" id="alertIcon"></div>
+        <div class="alert-content">
+            <div id="alertMessage"></div>
+        </div>
+    </div>
+
+    <!-- القائمة المنسدلة للحالة -->
+    <div id="statusDropdown" class="status-dropdown">
+        <div class="status-dropdown-header">اختر حالة المحافظة</div>
+        <div class="status-options-container" id="statusOptionsContainer">
+            <!-- سيتم إضافة الخيارات هنا -->
+        </div>
+    </div>
+
+    <script>
+        // ============================================
+        // تهيئة Firebase
+        // ============================================
+        const firebaseConfig = {
+            apiKey: "AIzaSyAZzoRSadql33zsoQHQjssOsgZUIiel_RE",
+            authDomain: "holidays-61fa7.firebaseapp.com",
+            databaseURL: "https://holidays-61fa7-default-rtdb.firebaseio.com",
+            projectId: "holidays-61fa7",
+            storageBucket: "holidays-61fa7.firebasestorage.app",
+            messagingSenderId: "420209774284",
+            appId: "1:420209774284:web:4e3c4250becd37a89ebc69",
+            measurementId: "G-S1KY237H0W"
+        };
+
+        // تهيئة Firebase
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const database = firebase.database();
+
+        // ============================================
+        // معلومات المالك
+        // ============================================
+        const OWNER_EMAIL = "mslmalmyaly223@gmail.com";
+        const OWNER_PASSWORD = "admin123";
+
+        // ============================================
+        // قائمة المحافظات العراقية
+        // ============================================
+        const PROVINCES = [
+            "بغداد", "البصرة", "نينوى", "أربيل", "السليمانية", "ذي قار", 
+            "واسط", "ديالى", "المثنى", "القادسية", "بابل", "كربلاء", 
+            "النجف", "الأنبار", "صلاح الدين", "كركوك", "دهوك", "ميسان"
+        ];
+
+        // ============================================
+        // حالات العطل
+        // ============================================
+        const STATUS_OPTIONS = [
+            "لا يوجد عطلة",
+            "نسبة قليلة", 
+            "ممكن جدا",
+            "تم التعطيل",
+            "10٪",
+            "20٪",
+            "30٪",
+            "40٪",
+            "50٪",
+            "60٪",
+            "70٪",
+            "80٪",
+            "90٪",
+            "100٪"
+        ];
+
+        // ============================================
+        // متغيرات التطبيق
+        // ============================================
+        let currentUser = null;
+        let isOwner = false;
+        let provincesData = {};
+        let userFavorites = [];
+        let currentStatusProvince = null;
+        let dropdownClickListener = null;
+        let isScrolling = false;
+        let scrollTimer = null;
+        let usedEmails = new Set();
+        let dropdownVisible = false;
+        let isTouchDevice = false;
+        let dropdownScrollable = false;
+        let dropdownStartY = 0;
+        let dropdownScrollTop = 0;
+
+        // ============================================
+        // تهيئة التطبيق عند تحميل الصفحة
+        // ============================================
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeApp();
+            setupEventListeners();
+            checkPreviousLogin();
+            setupScrollTopButton();
+            setupTouchDetection();
+            initializeStatusDropdown();
+        });
+
+        // ============================================
+        // وظيفة: تهيئة التطبيق
+        // ============================================
+        function initializeApp() {
+            // منع النقر بزر الماوس الأيمن
+            document.addEventListener('contextmenu', function(e) {
+                e.preventDefault();
+                showAlert('النسخ غير مسموح في هذا التطبيق', 'warning');
+            });
+
+            // منع اختيار النص
+            document.addEventListener('selectstart', function(e) {
+                e.preventDefault();
+            });
+
+            // منع سحب الصور
+            document.addEventListener('dragstart', function(e) {
+                if (e.target.tagName === 'IMG' || e.target.tagName === 'A') {
+                    e.preventDefault();
+                }
+            });
+
+            // تحسين التمرير
+            setupSmoothScrolling();
+        }
+
+        // ============================================
+        // وظيفة: إعداد مستمعي الأحداث
+        // ============================================
+        function setupEventListeners() {
+            // أحداث تسجيل الدخول
+            document.getElementById('createAccountBtn').addEventListener('click', createAccount);
+            document.getElementById('loginBtnSmall').addEventListener('click', login);
+            document.getElementById('autoFillBtn').addEventListener('click', autoFill);
+            
+            // أحداث الإدخال
+            document.getElementById('email').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') createAccount();
+            });
+            
+            document.getElementById('password').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') createAccount();
+            });
+            
+            // أحداث التطبيق
+            document.getElementById('saveBtn').addEventListener('click', saveUpdates);
+            document.getElementById('scrollTopBtn').addEventListener('click', scrollToTop);
+            document.getElementById('refreshBtn').addEventListener('click', manualRefresh);
+            document.getElementById('logoutBtn').addEventListener('click', logout);
+            
+            // إغلاق القائمة المنسدلة عند النقر خارجها
+            document.addEventListener('mousedown', handleDocumentClick);
+            document.addEventListener('touchstart', handleDocumentClick);
+        }
+
+        // ============================================
+        // وظيفة: التعامل مع النقر خارج القائمة
+        // ============================================
+        function handleDocumentClick(e) {
+            if (dropdownVisible) {
+                const dropdown = document.getElementById('statusDropdown');
+                const statusBtn = e.target.closest('.status-btn');
+                
+                // إذا كان النقر داخل القائمة المنسدلة، لا نفعل شيئاً (للسحب)
+                if (dropdown.contains(e.target)) {
+                    return;
+                }
+                
+                // إذا كان النقر خارج القائمة وليس على زر الحالة، نخفي القائمة
+                if (!dropdown.contains(e.target) && !statusBtn) {
+                    hideStatusDropdown();
+                }
+            }
+        }
+
+        // ============================================
+        // وظيفة: اكتشاف الجهاز اللمسي
+        // ============================================
+        function setupTouchDetection() {
+            isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+        }
+
+        // ============================================
+        // وظيفة: إعداد التمرير السلس
+        // ============================================
+        function setupSmoothScrolling() {
+            const container = document.getElementById('provincesContainer');
+            
+            if (isTouchDevice) {
+                // للأجهزة اللمسية
+                container.style.overscrollBehavior = 'contain';
+                container.style.webkitOverflowScrolling = 'touch';
+            } else {
+                // لأجهزة الكمبيوتر
+                container.addEventListener('wheel', function(e) {
+                    e.preventDefault();
+                    container.scrollTop += e.deltaY;
+                }, { passive: false });
+            }
+        }
+
+        // ============================================
+        // وظيفة: توليد بريد وكلمة مرور فريدين
+        // ============================================
+        function generateUniqueCredentials() {
+            // توليد معرف فريد عشوائي
+            const generateRandomString = (length) => {
+                const chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+                let result = '';
+                for (let i = 0; i < length; i++) {
+                    result += chars.charAt(Math.floor(Math.random() * chars.length));
+                }
+                return result;
+            };
+
+            // توليد بريد إلكتروني فريد تماماً
+            let email, password;
+            let attempts = 0;
+            const maxAttempts = 100;
+            
+            do {
+                // توليد بريد إلكتروني بطول 8-12 حرف
+                const usernameLength = Math.floor(Math.random() * 5) + 8;
+                const username = generateRandomString(usernameLength);
+                email = username.toLowerCase() + '@gmail.com';
+                attempts++;
+                
+                if (attempts > maxAttempts) {
+                    // إذا تجاوزنا المحاولات، نضيف الطابع الزمني
+                    const timestamp = Date.now().toString(36);
+                    email = generateRandomString(6).toLowerCase() + timestamp + '@gmail.com';
+                }
+            } while (usedEmails.has(email));
+            
+            usedEmails.add(email);
+            
+            // توليد كلمة مرور قوية (10-14 حرف)
+            const passwordLength = Math.floor(Math.random() * 5) + 10;
+            password = generateRandomString(passwordLength);
+            
+            return { email, password };
+        }
+
+        // ============================================
+        // وظيفة: الملئ التلقائي
+        // ============================================
+        function autoFill() {
+            // توليد بيانات فريدة لكل مستخدم
+            const credentials = generateUniqueCredentials();
+            
+            document.getElementById('email').value = credentials.email;
+            document.getElementById('password').value = credentials.password;
+            
+            // إخفاء أي رسائل سابقة
+            document.getElementById('loginMessage').style.display = 'none';
+            
+            // عرض رسالة للمستخدم
+            showLoginMessage('تم ملئ البيانات، اضغط على زر إنشاء حساب جديد', 'success');
+        }
+
+        // ============================================
+        // وظيفة: إنشاء حساب جديد
+        // ============================================
+        function createAccount() {
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value;
+            const loginMessage = document.getElementById('loginMessage');
+            
+            // التحقق من صحة البيانات
+            if (!email || !password) {
+                showLoginMessage('الرجاء إدخال البريد الإلكتروني وكلمة المرور', 'error');
+                return;
+            }
+            
+            if (password.length < 6) {
+                showLoginMessage('كلمة المرور يجب أن تكون 6 أحرف على الأقل', 'error');
+                return;
+            }
+            
+            // التحقق من أن البريد ينتهي بـ @gmail.com
+            if (!email.endsWith('@gmail.com')) {
+                showLoginMessage('البريد الإلكتروني يجب أن ينتهي بـ @gmail.com', 'error');
+                return;
+            }
+            
+            showLoading('جاري إنشاء الحساب...');
+            
+            auth.createUserWithEmailAndPassword(email, password)
+                .then((userCredential) => {
+                    // حساب جديد تم إنشاؤه بنجاح
+                    currentUser = userCredential.user;
+                    
+                    // التحقق إذا كان المستخدم هو المالك
+                    isOwner = (email === OWNER_EMAIL);
+                    
+                    // حفظ بيانات المستخدم
+                    const userData = {
+                        email: email,
+                        createdAt: new Date().toISOString(),
+                        isOwner: isOwner,
+                        lastLogin: new Date().toISOString()
+                    };
+                    
+                    // حفظ في قاعدة البيانات
+                    return database.ref('users/' + currentUser.uid).set(userData);
+                })
+                .then(() => {
+                    // حفظ للتسجيل التلقائي
+                    localStorage.setItem('holidays_user', JSON.stringify({
+                        email: email,
+                        password: password
+                    }));
+                    
+                    // تحميل بيانات التطبيق
+                    return loadAppData();
+                })
+                .then(() => {
+                    // تأخير لإظهار الرسالة والانتقال
+                    setTimeout(() => {
+                        hideLoading();
+                        showLoginMessage('تم إنشاء الحساب بنجاح!', 'success');
+                        setTimeout(() => {
+                            showAppScreen();
+                        }, 1500);
+                    }, 1500);
+                })
+                .catch((error) => {
+                    hideLoading();
+                    showLoginMessage('خطأ في إنشاء الحساب: ' + getErrorMessage(error), 'error');
+                });
+        }
+
+        // ============================================
+        // وظيفة: تسجيل الدخول
+        // ============================================
+        function login() {
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value;
+            
+            if (!email || !password) {
+                showLoginMessage('الرجاء إدخال البريد الإلكتروني وكلمة المرور', 'error');
+                return;
+            }
+            
+            // التحقق من أن البريد ينتهي بـ @gmail.com
+            if (!email.endsWith('@gmail.com')) {
+                showLoginMessage('البريد الإلكتروني يجب أن ينتهي بـ @gmail.com', 'error');
+                return;
+            }
+            
+            showLoading('جاري تسجيل الدخول...');
+            
+            auth.signInWithEmailAndPassword(email, password)
+                .then((userCredential) => {
+                    currentUser = userCredential.user;
+                    isOwner = (email === OWNER_EMAIL);
+                    
+                    // حفظ بيانات المستخدم
+                    localStorage.setItem('holidays_user', JSON.stringify({
+                        email: email,
+                        password: password
+                    }));
+                    
+                    // تحديث وقت آخر تسجيل دخول
+                    if (currentUser) {
+                        database.ref('users/' + currentUser.uid + '/lastLogin').set(new Date().toISOString());
+                    }
+                    
+                    // تحميل بيانات التطبيق
+                    return loadAppData();
+                })
+                .then(() => {
+                    // التأخير لإكمال التحميل
+                    setTimeout(() => {
+                        hideLoading();
+                        showAppScreen();
+                    }, 1500);
+                })
+                .catch((error) => {
+                    hideLoading();
+                    showLoginMessage('خطأ في تسجيل الدخول: ' + getErrorMessage(error), 'error');
+                });
+        }
+
+        // ============================================
+        // وظيفة: التحقق من تسجيل الدخول السابق
+        // ============================================
+        function checkPreviousLogin() {
+            const savedUser = localStorage.getItem('holidays_user');
+            if (savedUser) {
+                showLoading('جاري تحميل العطل');
+                try {
+                    const user = JSON.parse(savedUser);
+                    
+                    // التحقق من أن البريد ينتهي بـ @gmail.com
+                    if (!user.email.endsWith('@gmail.com')) {
+                        localStorage.removeItem('holidays_user');
+                        hideLoading();
+                        return;
+                    }
+                    
+                    // محاولة تسجيل الدخول التلقائي
+                    auth.signInWithEmailAndPassword(user.email, user.password)
+                        .then((userCredential) => {
+                            currentUser = userCredential.user;
+                            isOwner = (user.email === OWNER_EMAIL);
+                            return loadAppData();
+                        })
+                        .then(() => {
+                            // التأخير لإكمال التحميل
+                            setTimeout(() => {
+                                hideLoading();
+                                showAppScreen();
+                            }, 1500);
+                        })
+                        .catch(() => {
+                            // إذا فشل تسجيل الدخول التلقائي
+                            localStorage.removeItem('holidays_user');
+                            hideLoading();
+                        });
+                } catch (e) {
+                    localStorage.removeItem('holidays_user');
+                    hideLoading();
+                }
+            }
+        }
+
+        // ============================================
+        // وظيفة: تحميل بيانات التطبيق
+        // ============================================
+        function loadAppData() {
+            return new Promise((resolve, reject) => {
+                // تحميل بيانات المحافظات
+                database.ref('provinces').once('value')
+                    .then((snapshot) => {
+                        provincesData = snapshot.val() || {};
+                        
+                        // تهيئة البيانات إذا كانت فارغة
+                        if (Object.keys(provincesData).length === 0) {
+                            provincesData = {};
+                            PROVINCES.forEach(province => {
+                                provincesData[province] = 0;
+                            });
+                        }
+                        
+                        // تحميل المفضلة للمستخدم
+                        if (currentUser && !isOwner) {
+                            return database.ref('userFavorites/' + currentUser.uid).once('value');
+                        }
+                        return Promise.resolve(null);
+                    })
+                    .then((favoritesSnapshot) => {
+                        if (favoritesSnapshot) {
+                            userFavorites = favoritesSnapshot.val() || [];
+                        }
+                        
+                        // حل الوعد بنجاح بعد التأخير
+                        setTimeout(() => {
+                            resolve();
+                        }, 1000);
+                    })
+                    .catch((error) => {
+                        console.error('Error loading app data:', error);
+                        reject(error);
+                    });
+            });
+        }
+
+        // ============================================
+        // وظيفة: تسجيل الخروج
+        // ============================================
+        function logout() {
+            if (confirm('هل تريد تسجيل الخروج؟')) {
+                showLoading('جاري تسجيل الخروج...');
+                
+                if (currentUser) {
+                    auth.signOut().then(() => {
+                        localStorage.removeItem('holidays_user');
+                        currentUser = null;
+                        isOwner = false;
+                        
+                        setTimeout(() => {
+                            hideLoading();
+                            window.location.reload();
+                        }, 1000);
+                    }).catch((error) => {
+                        hideLoading();
+                        showAlert('خطأ في تسجيل الخروج: ' + error.message, 'error');
+                    });
+                } else {
+                    localStorage.removeItem('holidays_user');
+                    hideLoading();
+                    window.location.reload();
+                }
+            }
+        }
+
+        // ============================================
+        // وظيفة: إظهار شاشة التطبيق
+        // ============================================
+        function showAppScreen() {
+            document.getElementById('loginScreen').style.display = 'none';
+            document.getElementById('appScreen').style.display = 'block';
+            
+            // إظهار زر الحفظ فقط للمالك
+            if (isOwner) {
+                document.getElementById('saveBtn').style.display = 'block';
+            }
+            
+            // إظهار زر التحديث للجميع
+            document.getElementById('refreshBtn').style.display = 'flex';
+            
+            // عرض المحافظات
+            renderProvinces();
+            
+            // الاستماع للتحديثات في الوقت الحقيقي
+            setupRealtimeUpdates();
+            
+            // إظهار رسالة ترحيب
+            setTimeout(() => {
+                showAlert('مرحباً بك في تطبيق اخبار العطل', 'success');
+            }, 500);
+        }
+
+        // ============================================
+        // وظيفة: عرض المحافظات
+        // ============================================
+        function renderProvinces() {
+            const provincesGrid = document.getElementById('provincesGrid');
+            provincesGrid.innerHTML = '';
+            
+            // فرز المحافظات: المفضلة أولاً
+            const sortedProvinces = [...PROVINCES].sort((a, b) => {
+                const aIsFavorite = userFavorites.includes(a);
+                const bIsFavorite = userFavorites.includes(b);
+                if (aIsFavorite && !bIsFavorite) return -1;
+                if (!aIsFavorite && bIsFavorite) return 1;
+                return 0;
+            });
+            
+            sortedProvinces.forEach((province) => {
+                const provinceCard = createProvinceCard(province);
+                provincesGrid.appendChild(provinceCard);
+            });
+            
+            // ضمان وجود مساحة كافية للتمرير
+            ensureScrollableArea();
+        }
+
+        // ============================================
+        // وظيفة: ضمان وجود مساحة كافية للتمرير
+        // ============================================
+        function ensureScrollableArea() {
+            const container = document.getElementById('provincesContainer');
+            const grid = document.getElementById('provincesGrid');
+            
+            // حساب ارتفاع العناصر
+            const cardHeight = window.innerWidth <= 768 ? 90 : 100;
+            const gap = 15;
+            const rows = Math.ceil(PROVINCES.length / (window.innerWidth > 1024 ? 3 : (window.innerWidth > 768 ? 2 : 1)));
+            const totalHeight = (cardHeight * rows) + (gap * (rows - 1)) + 100;
+            
+            // ضبط الحد الأدنى للارتفاع
+            grid.style.minHeight = Math.max(totalHeight, container.clientHeight) + 'px';
+        }
+
+        // ============================================
+        // وظيفة: إنشاء بطاقة محافظة
+        // ============================================
+        function createProvinceCard(provinceName) {
+            const card = document.createElement('div');
+            card.className = 'province-card';
+            
+            if (userFavorites.includes(provinceName)) {
+                card.classList.add('favorite');
+            }
+            
+            card.dataset.province = provinceName;
+            
+            // اسم المحافظة
+            const nameSpan = document.createElement('span');
+            nameSpan.className = 'province-name';
+            nameSpan.textContent = provinceName;
+            
+            // زر المفضلة (للمستخدمين العاديين فقط)
+            let favoriteBtn = null;
+            if (!isOwner) {
+                favoriteBtn = document.createElement('button');
+                favoriteBtn.className = 'favorite-btn';
+                favoriteBtn.innerHTML = '<i class="fas fa-star"></i>';
+                
+                if (userFavorites.includes(provinceName)) {
+                    favoriteBtn.classList.add('active');
+                }
+                
+                if (isTouchDevice) {
+                    favoriteBtn.addEventListener('touchstart', (e) => {
+                        e.stopPropagation();
+                        e.preventDefault();
+                    }, { passive: false });
+                    
+                    favoriteBtn.addEventListener('touchend', (e) => {
+                        e.stopPropagation();
+                        e.preventDefault();
+                        toggleFavorite(provinceName);
+                    }, { passive: false });
+                } else {
+                    favoriteBtn.onclick = (e) => {
+                        e.stopPropagation();
+                        e.preventDefault();
+                        toggleFavorite(provinceName);
+                    };
+                }
+                
+                card.appendChild(favoriteBtn);
+            }
+            
+            // زر الحالة
+            const statusBtn = document.createElement('button');
+            statusBtn.className = 'status-btn';
+            
+            // الحصول على حالة المحافظة الحالية
+            const currentStatus = provincesData[provinceName] || 0;
+            statusBtn.textContent = STATUS_OPTIONS[currentStatus];
+            statusBtn.classList.add(`status-${currentStatus}`);
+            
+            // إضافة أيقونة للزر
+            const statusIcon = document.createElement('i');
+            statusIcon.className = getStatusIcon(currentStatus);
+            statusBtn.prepend(statusIcon);
+            
+            // للمالك فقط: إضافة قائمة منسدلة
+            if (isOwner) {
+                statusBtn.classList.add('owner');
+                if (isTouchDevice) {
+                    statusBtn.addEventListener('touchstart', (e) => {
+                        e.stopPropagation();
+                        e.preventDefault();
+                        showStatusDropdown(e, provinceName);
+                    }, { passive: false });
+                } else {
+                    statusBtn.onclick = (e) => {
+                        e.stopPropagation();
+                        e.preventDefault();
+                        showStatusDropdown(e, provinceName);
+                    };
+                }
+                statusBtn.title = 'انقر لتغيير الحالة';
+            } else {
+                statusBtn.classList.add('user');
+                statusBtn.style.cursor = 'default';
+            }
+            
+            card.appendChild(nameSpan);
+            card.appendChild(statusBtn);
+            
+            return card;
+        }
+
+        // ============================================
+        // وظيفة: الحصول على أيقونة الحالة
+        // ============================================
+        function getStatusIcon(statusIndex) {
+            const icons = [
+                'fas fa-check-circle',
+                'fas fa-exclamation-triangle',
+                'fas fa-question-circle',
+                'fas fa-times-circle',
+                'fas fa-chart-pie',
+                'fas fa-chart-pie',
+                'fas fa-chart-pie',
+                'fas fa-chart-pie',
+                'fas fa-chart-pie',
+                'fas fa-chart-pie',
+                'fas fa-chart-pie',
+                'fas fa-chart-pie',
+                'fas fa-chart-pie',
+                'fas fa-chart-pie'
+            ];
+            return icons[statusIndex] || 'fas fa-circle';
+        }
+
+        // ============================================
+        // وظيفة: تهيئة القائمة المنسدلة للحالات
+        // ============================================
+        function initializeStatusDropdown() {
+            const container = document.getElementById('statusOptionsContainer');
+            container.innerHTML = '';
+            
+            STATUS_OPTIONS.forEach((status, index) => {
+                const option = document.createElement('div');
+                option.className = `status-option status-${index}`;
+                option.textContent = status;
+                option.dataset.status = index;
+                
+                // إضافة مستمعات الأحداث لكل خيار
+                setupOptionEventListeners(option, index);
+                
+                container.appendChild(option);
+            });
+        }
+
+        // ============================================
+        // وظيفة: إعداد مستمعات الأحداث للخيارات
+        // ============================================
+        function setupOptionEventListeners(option, index) {
+            // للمسات
+            if (isTouchDevice) {
+                option.addEventListener('touchstart', function(e) {
+                    e.stopPropagation();
+                    e.preventDefault();
+                }, { passive: false });
+                
+                option.addEventListener('touchend', function(e) {
+                    e.stopPropagation();
+                    e.preventDefault();
+                    selectStatus(currentStatusProvince, index);
+                    hideStatusDropdown();
+                }, { passive: false });
+            } else {
+                // للماوس
+                option.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    e.preventDefault();
+                    selectStatus(currentStatusProvince, index);
+                    hideStatusDropdown();
+                });
+            }
+        }
+
+        // ============================================
+        // وظيفة: إظهار القائمة المنسدلة للحالة
+        // ============================================
+        function showStatusDropdown(event, provinceName) {
+            // إخفاء أي قائمة مفتوحة سابقاً
+            if (dropdownVisible) {
+                hideStatusDropdown();
+                return;
+            }
+            
+            // حفظ المحافظة الحالية
+            currentStatusProvince = provinceName;
+            
+            const dropdown = document.getElementById('statusDropdown');
+            
+            // إعداد القائمة المنسدلة في منتصف الشاشة
+            dropdown.style.display = 'block';
+            dropdown.style.opacity = '1';
+            
+            // منع تمرير الصفحة عند فتح القائمة
+            document.body.style.overflow = 'hidden';
+            document.getElementById('provincesContainer').style.overflow = 'hidden';
+            
+            // وضع علامة أن القائمة ظاهرة
+            dropdownVisible = true;
+            
+            // إعداد التمرير السلس داخل القائمة المنسدلة
+            setupDropdownScrolling();
+            
+            // إضافة مستمعات الأحداث للسحب
+            if (isTouchDevice) {
+                setupDropdownTouchEvents();
+            }
+        }
+
+        // ============================================
+        // وظيفة: إعداد التمرير داخل القائمة المنسدلة
+        // ============================================
+        function setupDropdownScrolling() {
+            const container = document.querySelector('.status-options-container');
+            
+            // إعادة تعيين التمرير إلى الأعلى
+            container.scrollTop = 0;
+            
+            // إعداد التمرير السلس
+            container.style.scrollBehavior = 'smooth';
+        }
+
+        // ============================================
+        // وظيفة: إعداد أحداث اللمس للقائمة المنسدلة
+        // ============================================
+        function setupDropdownTouchEvents() {
+            const container = document.querySelector('.status-options-container');
+            
+            container.addEventListener('touchstart', function(e) {
+                dropdownStartY = e.touches[0].clientY;
+                dropdownScrollTop = container.scrollTop;
+                dropdownScrollable = true;
+            }, { passive: true });
+            
+            container.addEventListener('touchmove', function(e) {
+                if (!dropdownScrollable) return;
+                
+                const touchY = e.touches[0].clientY;
+                const deltaY = dropdownStartY - touchY;
+                
+                // تحديث موقع التمرير
+                container.scrollTop = dropdownScrollTop + deltaY;
+                
+                // منع الانتشار لبقية الصفحة
+                e.preventDefault();
+            }, { passive: false });
+            
+            container.addEventListener('touchend', function() {
+                dropdownScrollable = false;
+            }, { passive: true });
+        }
+
+        // ============================================
+        // وظيفة: إخفاء القائمة المنسدلة
+        // ============================================
+        function hideStatusDropdown() {
+            if (!dropdownVisible) return;
+            
+            const dropdown = document.getElementById('statusDropdown');
+            dropdown.style.display = 'none';
+            
+            // إعادة تفعيل التمرير
+            document.body.style.overflow = '';
+            document.getElementById('provincesContainer').style.overflow = 'auto';
+            
+            // إزالة مستمعات الأحداث
+            const container = document.querySelector('.status-options-container');
+            if (container) {
+                container.removeEventListener('touchstart', handleTouchStart);
+                container.removeEventListener('touchmove', handleTouchMove);
+                container.removeEventListener('touchend', handleTouchEnd);
+            }
+            
+            dropdownVisible = false;
+            currentStatusProvince = null;
+            dropdownScrollable = false;
+        }
+
+        // ============================================
+        // وظيفة: اختيار حالة للمحافظة
+        // ============================================
+        function selectStatus(provinceName, statusIndex) {
+            if (!provinceName || statusIndex === undefined) return;
+            
+            provincesData[provinceName] = statusIndex;
+            
+            // تحديث الزر في الواجهة
+            const card = document.querySelector(`[data-province="${provinceName}"]`);
+            if (card) {
+                const statusBtn = card.querySelector('.status-btn');
+                if (statusBtn) {
+                    statusBtn.textContent = STATUS_OPTIONS[statusIndex];
+                    
+                    // إزالة جميع فئات الألوان وإضافة الجديدة
+                    statusBtn.className = 'status-btn owner';
+                    statusBtn.classList.add(`status-${statusIndex}`);
+                    
+                    // تحديث الأيقونة
+                    const icon = statusBtn.querySelector('i');
+                    if (icon) {
+                        icon.className = getStatusIcon(statusIndex);
+                    } else {
+                        const newIcon = document.createElement('i');
+                        newIcon.className = getStatusIcon(statusIndex);
+                        statusBtn.prepend(newIcon);
+                    }
+                }
+            }
+            
+            // إظهار زر الحفظ للنبض (للمالك فقط)
+            if (isOwner) {
+                const saveBtn = document.getElementById('saveBtn');
+                saveBtn.classList.add('pulse');
+                saveBtn.innerHTML = '<i class="fas fa-save"></i> حفظ التحديثات (توجد تغييرات)';
+            }
+        }
+
+        // ============================================
+        // وظيفة: حفظ التحديثات في قاعدة البيانات
+        // ============================================
+        function saveUpdates() {
+            if (!isOwner) {
+                showAlert('غير مصرح لك بحفظ التحديثات', 'error');
+                return;
+            }
+            
+            showLoading('جاري حفظ التحديثات...');
+            
+            database.ref('provinces').set(provincesData)
+                .then(() => {
+                    hideLoading();
+                    showAlert('تم حفظ التحديثات بنجاح', 'success');
+                    
+                    // إزالة تأثير النبض من زر الحفظ
+                    const saveBtn = document.getElementById('saveBtn');
+                    saveBtn.classList.remove('pulse');
+                    saveBtn.innerHTML = '<i class="fas fa-save"></i> حفظ التحديثات';
+                })
+                .catch((error) => {
+                    hideLoading();
+                    showAlert('خطأ في حفظ التحديثات: ' + error.message, 'error');
+                    console.error('Save error:', error);
+                });
+        }
+
+        // ============================================
+        // وظيفة: تبديل المفضلة
+        // ============================================
+        function toggleFavorite(provinceName) {
+            if (!currentUser || isOwner) return;
+            
+            const index = userFavorites.indexOf(provinceName);
+            if (index > -1) {
+                // إزالة من المفضلة
+                userFavorites.splice(index, 1);
+            } else {
+                // إضافة إلى المفضلة
+                userFavorites.push(provinceName);
+            }
+            
+            // تحديث الواجهة فوراً
+            const card = document.querySelector(`[data-province="${provinceName}"]`);
+            const favoriteBtn = card.querySelector('.favorite-btn');
+            
+            if (favoriteBtn) {
+                if (index > -1) {
+                    card.classList.remove('favorite');
+                    favoriteBtn.classList.remove('active');
+                } else {
+                    card.classList.add('favorite');
+                    favoriteBtn.classList.add('active');
+                }
+            }
+            
+            // حفظ المفضلة في قاعدة البيانات
+            database.ref('userFavorites/' + currentUser.uid).set(userFavorites)
+                .then(() => {
+                    // إعادة ترتيب المحافظات
+                    renderProvinces();
+                })
+                .catch((error) => {
+                    showAlert('خطأ في تحديث المفضلة', 'error');
+                });
+        }
+
+        // ============================================
+        // وظيفة: إعداد التحديثات في الوقت الحقيقي
+        // ============================================
+        function setupRealtimeUpdates() {
+            // الاستماع لتحديثات المحافظات
+            database.ref('provinces').on('value', (snapshot) => {
+                const newData = snapshot.val() || {};
+                
+                // تحديث البيانات المحلية
+                provincesData = newData;
+                
+                // تحديث واجهة المستخدم فقط إذا لم يكن المستخدم مالكاً
+                // (لأن المالك يقوم بالتحديث بنفسه)
+                if (!isOwner) {
+                    renderProvinces();
+                }
+            });
+            
+            // الاستماع لتحديثات المفضلة
+            if (currentUser && !isOwner) {
+                database.ref('userFavorites/' + currentUser.uid).on('value', (snapshot) => {
+                    userFavorites = snapshot.val() || [];
+                    renderProvinces();
+                });
+            }
+        }
+
+        // ============================================
+        // وظيفة: التحديث اليدوي
+        // ============================================
+        function manualRefresh() {
+            showAlert('جارٍ تحديث البيانات...', 'info');
+            
+            loadAppData().then(() => {
+                renderProvinces();
+                showAlert('تم تحديث البيانات بنجاح', 'success');
+                
+                // إضافة تأثير تدوير للزر
+                const refreshBtn = document.getElementById('refreshBtn');
+                refreshBtn.style.animation = 'rotate 0.5s linear';
+                setTimeout(() => {
+                    refreshBtn.style.animation = '';
+                }, 500);
+            }).catch((error) => {
+                showAlert('خطأ في تحديث البيانات', 'error');
+            });
+        }
+
+        // ============================================
+        // وظيفة: إعداد زر العودة للأعلى
+        // ============================================
+        function setupScrollTopButton() {
+            const container = document.getElementById('provincesContainer');
+            const scrollTopBtn = document.getElementById('scrollTopBtn');
+            
+            container.addEventListener('scroll', () => {
+                if (container.scrollTop > 300) {
+                    scrollTopBtn.style.display = 'flex';
+                } else {
+                    scrollTopBtn.style.display = 'none';
+                }
+            });
+        }
+
+        // ============================================
+        // وظيفة: التمرير للأعلى
+        // ============================================
+        function scrollToTop() {
+            const container = document.getElementById('provincesContainer');
+            container.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
+
+        // ============================================
+        // وظائف المساعدة
+        // ============================================
+
+        // إظهار رسالة تنبيه
+        function showAlert(message, type = 'info') {
+            const alert = document.getElementById('alertNotification');
+            const messageEl = document.getElementById('alertMessage');
+            const iconEl = document.getElementById('alertIcon');
+            
+            // تعيين الرسالة
+            messageEl.textContent = message;
+            
+            // تعيين النوع والأيقونة
+            alert.className = 'alert-notification';
+            alert.classList.add(type);
+            
+            const icons = {
+                success: '✓',
+                error: '✗',
+                warning: '⚠',
+                info: 'ℹ'
+            };
+            
+            iconEl.textContent = icons[type] || 'ℹ';
+            
+            // إظهار الرسالة
+            alert.classList.add('show');
+            
+            // إخفاء الرسالة بعد 3 ثوانٍ
+            setTimeout(() => {
+                alert.classList.remove('show');
+            }, 3000);
+        }
+
+        // إظهار رسالة تسجيل الدخول
+        function showLoginMessage(message, type = 'info') {
+            const messageEl = document.getElementById('loginMessage');
+            messageEl.textContent = message;
+            messageEl.className = 'login-message ' + type;
+            messageEl.style.display = 'block';
+        }
+
+        // إظهار شاشة التحميل
+        function showLoading(text = 'جاري تحميل العطل') {
+            document.getElementById('loadingText').textContent = text;
+            document.getElementById('loadingSubtitle').textContent = 'يرجى الانتظار...';
+            document.getElementById('loadingOverlay').style.display = 'flex';
+        }
+
+        // إخفاء شاشة التحميل
+        function hideLoading() {
+            document.getElementById('loadingOverlay').style.display = 'none';
+        }
+
+        // تحويل رسائل الخطأ
+        function getErrorMessage(error) {
+            switch (error.code) {
+                case 'auth/invalid-email':
+                    return 'البريد الإلكتروني غير صالح';
+                case 'auth/email-already-in-use':
+                    return 'هذا البريد الإلكتروني مستخدم بالفعل';
+                case 'auth/weak-password':
+                    return 'كلمة المرور ضعيفة جداً';
+                case 'auth/user-disabled':
+                    return 'هذا الحساب معطل';
+                case 'auth/user-not-found':
+                    return 'لم يتم العثور على حساب بهذا البريد';
+                case 'auth/wrong-password':
+                    return 'كلمة المرور غير صحيحة';
+                case 'auth/network-request-failed':
+                    return 'خطأ في الاتصال بالشبكة';
+                case 'PERMISSION_DENIED':
+                    return 'غير مصرح لك بتنفيذ هذا الإجراء';
+                default:
+                    return error.message || 'حدث خطأ غير متوقع';
+            }
+        }
+
+        // دوال اللمس للمعالجات
+        function handleTouchStart(e) {
+            if (dropdownVisible && e.target.closest('.status-options-container')) {
+                dropdownStartY = e.touches[0].clientY;
+                dropdownScrollTop = e.target.scrollTop;
+                dropdownScrollable = true;
+            }
+        }
+
+        function handleTouchMove(e) {
+            if (dropdownScrollable && dropdownVisible) {
+                const touchY = e.touches[0].clientY;
+                const deltaY = dropdownStartY - touchY;
+                const container = document.querySelector('.status-options-container');
+                container.scrollTop = dropdownScrollTop + deltaY;
+                e.preventDefault();
+            }
+        }
+
+        function handleTouchEnd() {
+            dropdownScrollable = false;
+        }
+
+        // إضافة اختصار لوحة المفاتيح للخروج (للتطوير فقط)
+        document.addEventListener('keydown', function(e) {
+            // Ctrl+Shift+L لتسجيل الخروج
+            if (e.ctrlKey && e.shiftKey && e.key === 'L') {
+                logout();
+            }
+            
+            // ESC لإغلاق القائمة المنسدلة
+            if (e.key === 'Escape' && dropdownVisible) {
+                hideStatusDropdown();
+            }
+        });
+    </script>
+</body>
+  </html>
