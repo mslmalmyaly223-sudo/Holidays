@@ -87,6 +87,25 @@
             width: 100%;
         }
         
+        /* حقل عدد المستخدمين (للمالك فقط) */
+        .users-count {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: linear-gradient(45deg, #9c88ff, #8c7ae6);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: bold;
+            box-shadow: 0 4px 10px rgba(156, 136, 255, 0.5);
+            display: none;
+            align-items: center;
+            gap: 8px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+        
         /* أزرار الرأس */
         .header-btn {
             background: linear-gradient(45deg, #1e90ff, #3742fa);
@@ -201,6 +220,8 @@
             background: linear-gradient(135deg, #0c2461 0%, #1e3799 100%);
             padding: 20px;
             position: relative;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
         }
         
         .login-box {
@@ -213,7 +234,7 @@
             max-width: 450px;
             text-align: center;
             border: 1px solid rgba(255, 255, 255, 0.15);
-            margin-bottom: 80px;
+            margin: 80px auto 150px auto;
         }
         
         .login-title {
@@ -282,11 +303,14 @@
             box-shadow: 0 4px 10px rgba(55, 66, 250, 0.5);
             font-family: 'Tajawal', sans-serif;
             letter-spacing: 0.5px;
-            position: absolute;
+            position: fixed;
             bottom: 20px;
             right: 20px;
-            opacity: 0.7;
-            z-index: 100;
+            opacity: 0.9;
+            z-index: 10000;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
         
         .login-btn-small:hover {
@@ -590,11 +614,11 @@
             background: rgba(255, 255, 255, 0.15);
         }
         
-        /* ألوان الحالات */
-        .status-0 { color: #2ed573; } .status-option.status-0::before { background: #2ed573; }
+        /* ألوان الحالات - معكوسة */
+        .status-0 { color: #ff4757; } .status-option.status-0::before { background: #ff4757; }
         .status-1 { color: #ff9f1a; } .status-option.status-1::before { background: #ff9f1a; }
         .status-2 { color: #1e90ff; } .status-option.status-2::before { background: #1e90ff; }
-        .status-3 { color: #ff4757; } .status-option.status-3::before { background: #ff4757; }
+        .status-3 { color: #2ed573; } .status-option.status-3::before { background: #2ed573; }
         .status-4 { color: #9c88ff; } .status-option.status-4::before { background: #9c88ff; }
         .status-5 { color: #8c7ae6; } .status-option.status-5::before { background: #8c7ae6; }
         .status-6 { color: #7158e2; } .status-option.status-6::before { background: #7158e2; }
@@ -605,6 +629,69 @@
         .status-11 { color: #44bd32; } .status-option.status-11::before { background: #44bd32; }
         .status-12 { color: #78e08f; } .status-option.status-12::before { background: #78e08f; }
         .status-13 { color: #badc58; } .status-option.status-13::before { background: #badc58; }
+        
+        /* منطقة التاريخ */
+        .date-container {
+            text-align: center;
+            padding: 5px 0;
+            margin-bottom: 10px;
+            background: rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            display: none;
+        }
+        
+        .date-display {
+            font-size: 15px;
+            color: #ffd32a;
+            font-weight: 600;
+            margin-bottom: 5px;
+            padding: 0 10px;
+        }
+        
+        .date-controls {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 5px;
+            flex-wrap: wrap;
+        }
+        
+        .date-input {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: 'Tajawal', sans-serif;
+            width: 120px;
+        }
+        
+        .date-select {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: 'Tajawal', sans-serif;
+            width: 120px;
+        }
+        
+        .update-date-btn {
+            background: linear-gradient(45deg, #9c88ff, #8c7ae6);
+            color: white;
+            border: none;
+            padding: 5px 15px;
+            border-radius: 8px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .update-date-btn:hover {
+            background: linear-gradient(45deg, #8c7ae6, #9c88ff);
+        }
         
         /* تذييل الصفحة */
         .footer {
@@ -760,6 +847,18 @@
                 font-size: 26px;
             }
             
+            .users-count {
+                position: relative;
+                top: 0;
+                right: 0;
+                transform: none;
+                margin-top: 10px;
+                display: none;
+                justify-content: center;
+                width: 100%;
+                order: 3;
+            }
+            
             .refresh-btn {
                 top: 10px;
                 right: 10px;
@@ -850,7 +949,7 @@
             }
             
             .login-box {
-                margin-bottom: 100px;
+                margin: 60px auto 100px auto;
                 padding: 30px 25px;
             }
             
@@ -859,6 +958,15 @@
                 right: 15px;
                 padding: 8px 16px;
                 font-size: 13px;
+            }
+            
+            .date-controls {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .date-input, .date-select {
+                width: 90%;
             }
         }
         
@@ -1002,7 +1110,7 @@
         /* تحسين للهواتف في الوضع الأفقي */
         @media (max-width: 767px) and (orientation: landscape) {
             .login-box {
-                margin-bottom: 100px;
+                margin: 60px auto 100px auto;
                 max-height: 90vh;
                 overflow-y: auto;
             }
@@ -1083,8 +1191,35 @@
             </div>
             <div class="header-content">
                 <h1 class="app-title">اخبار العطل</h1>
-                <div class="app-subtitle">تحديثات لحظية لحالة العطل في المحافظات</div>
+                <div id="holidayDateDisplay" class="app-subtitle"></div>
             </div>
+            
+            <!-- حقل عدد المستخدمين (للمالك فقط) -->
+            <div id="usersCount" class="users-count" style="display: none;">
+                <i class="fas fa-users"></i>
+                <span id="usersCountText">0 مستخدم</span>
+            </div>
+            
+            <!-- منطقة التاريخ (للمالك فقط) -->
+            <div id="dateContainer" class="date-container" style="display: none;">
+                <div class="date-display" id="currentDateDisplay"></div>
+                <div class="date-controls">
+                    <select id="daySelect" class="date-select">
+                        <option value="السبت">السبت</option>
+                        <option value="الأحد">الأحد</option>
+                        <option value="الاثنين">الاثنين</option>
+                        <option value="الثلاثاء">الثلاثاء</option>
+                        <option value="الأربعاء">الأربعاء</option>
+                        <option value="الخميس">الخميس</option>
+                        <option value="الجمعة">الجمعة</option>
+                    </select>
+                    <input type="date" id="dateInput" class="date-input">
+                    <button id="updateDateBtn" class="update-date-btn">
+                        <i class="fas fa-calendar-alt"></i> تحديث التاريخ
+                    </button>
+                </div>
+            </div>
+            
             <button id="refreshBtn" class="refresh-btn" title="تحديث العطل">
                 <i class="fas fa-sync-alt"></i>
             </button>
@@ -1208,6 +1343,12 @@
         let dropdownScrollable = false;
         let dropdownStartY = 0;
         let dropdownScrollTop = 0;
+        let holidayData = {
+            day: "الخميس",
+            date: "2024/01/01",
+            formatted: "ليوم الخميس الموافق 2024/01/01"
+        };
+        let totalUsers = 0;
 
         // ============================================
         // تهيئة التطبيق عند تحميل الصفحة
@@ -1219,6 +1360,7 @@
             setupScrollTopButton();
             setupTouchDetection();
             initializeStatusDropdown();
+            setupLoginScroll();
         });
 
         // ============================================
@@ -1245,6 +1387,9 @@
 
             // تحسين التمرير
             setupSmoothScrolling();
+            
+            // إظهار زر تسجيل الدخول الصغير للجميع
+            document.getElementById('loginBtnSmall').style.display = 'flex';
         }
 
         // ============================================
@@ -1271,9 +1416,38 @@
             document.getElementById('refreshBtn').addEventListener('click', manualRefresh);
             document.getElementById('logoutBtn').addEventListener('click', logout);
             
+            // أحداث التاريخ
+            document.getElementById('updateDateBtn').addEventListener('click', updateHolidayDate);
+            
             // إغلاق القائمة المنسدلة عند النقر خارجها
             document.addEventListener('mousedown', handleDocumentClick);
             document.addEventListener('touchstart', handleDocumentClick);
+            
+            // إغلاق القائمة المنسدلة عند الضغط على ESC
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape' && dropdownVisible) {
+                    hideStatusDropdown();
+                }
+            });
+        }
+
+        // ============================================
+        // وظيفة: إعداد التمرير في صفحة تسجيل الدخول
+        // ============================================
+        function setupLoginScroll() {
+            const loginContainer = document.getElementById('loginScreen');
+            
+            if (isTouchDevice) {
+                // للأجهزة اللمسية
+                loginContainer.style.overscrollBehavior = 'contain';
+                loginContainer.style.webkitOverflowScrolling = 'touch';
+            } else {
+                // لأجهزة الكمبيوتر
+                loginContainer.addEventListener('wheel', function(e) {
+                    e.preventDefault();
+                    loginContainer.scrollTop += e.deltaY;
+                }, { passive: false });
+            }
         }
 
         // ============================================
@@ -1428,6 +1602,9 @@
                     return database.ref('users/' + currentUser.uid).set(userData);
                 })
                 .then(() => {
+                    // تحديث عدد المستخدمين
+                    updateUsersCount();
+                    
                     // حفظ للتسجيل التلقائي
                     localStorage.setItem('holidays_user', JSON.stringify({
                         email: email,
@@ -1566,6 +1743,14 @@
                             });
                         }
                         
+                        // تحميل بيانات العطل
+                        return database.ref('holidayData').once('value');
+                    })
+                    .then((holidaySnapshot) => {
+                        if (holidaySnapshot.exists()) {
+                            holidayData = holidaySnapshot.val();
+                        }
+                        
                         // تحميل المفضلة للمستخدم
                         if (currentUser && !isOwner) {
                             return database.ref('userFavorites/' + currentUser.uid).once('value');
@@ -1577,6 +1762,10 @@
                             userFavorites = favoritesSnapshot.val() || [];
                         }
                         
+                        // تحديث عدد المستخدمين
+                        return updateUsersCount();
+                    })
+                    .then(() => {
                         // حل الوعد بنجاح بعد التأخير
                         setTimeout(() => {
                             resolve();
@@ -1587,6 +1776,28 @@
                         reject(error);
                     });
             });
+        }
+
+        // ============================================
+        // وظيفة: تحديث عدد المستخدمين
+        // ============================================
+        function updateUsersCount() {
+            return database.ref('users').once('value')
+                .then((snapshot) => {
+                    if (snapshot.exists()) {
+                        const users = snapshot.val();
+                        totalUsers = Object.keys(users).length;
+                        
+                        // تحديث العرض إذا كان المستخدم مالكاً
+                        if (isOwner) {
+                            document.getElementById('usersCountText').textContent = totalUsers + ' مستخدم';
+                            document.getElementById('usersCount').style.display = 'flex';
+                        }
+                    }
+                })
+                .catch((error) => {
+                    console.error('Error getting users count:', error);
+                });
         }
 
         // ============================================
@@ -1628,7 +1839,25 @@
             // إظهار زر الحفظ فقط للمالك
             if (isOwner) {
                 document.getElementById('saveBtn').style.display = 'block';
+                document.getElementById('dateContainer').style.display = 'block';
+                document.getElementById('usersCount').style.display = 'flex';
+                
+                // تعيين القيم الحالية في عناصر التحكم
+                document.getElementById('daySelect').value = holidayData.day;
+                
+                // تحويل التاريخ من yyyy/mm/dd إلى yyyy-mm-dd
+                const dateParts = holidayData.date.split('/');
+                if (dateParts.length === 3) {
+                    const formattedDate = `${dateParts[0]}-${dateParts[1].padStart(2, '0')}-${dateParts[2].padStart(2, '0')}`;
+                    document.getElementById('dateInput').value = formattedDate;
+                }
+                
+                // تحديث عرض التاريخ الحالي
+                document.getElementById('currentDateDisplay').textContent = holidayData.formatted;
             }
+            
+            // تحديث عرض التاريخ للجميع
+            document.getElementById('holidayDateDisplay').textContent = holidayData.formatted;
             
             // إظهار زر التحديث للجميع
             document.getElementById('refreshBtn').style.display = 'flex';
@@ -1643,6 +1872,45 @@
             setTimeout(() => {
                 showAlert('مرحباً بك في تطبيق اخبار العطل', 'success');
             }, 500);
+        }
+
+        // ============================================
+        // وظيفة: تحديث تاريخ العطلة
+        // ============================================
+        function updateHolidayDate() {
+            if (!isOwner) return;
+            
+            const selectedDay = document.getElementById('daySelect').value;
+            const selectedDate = document.getElementById('dateInput').value;
+            
+            if (!selectedDate) {
+                showAlert('الرجاء اختيار تاريخ', 'error');
+                return;
+            }
+            
+            // تحويل التاريخ من yyyy-mm-dd إلى yyyy/mm/dd
+            const dateParts = selectedDate.split('-');
+            const formattedDate = `${dateParts[0]}/${dateParts[1]}/${dateParts[2]}`;
+            
+            // تحديث بيانات العطلة
+            holidayData = {
+                day: selectedDay,
+                date: formattedDate,
+                formatted: `ليوم ${selectedDay} الموافق ${formattedDate}`
+            };
+            
+            // تحديث العرض
+            document.getElementById('holidayDateDisplay').textContent = holidayData.formatted;
+            document.getElementById('currentDateDisplay').textContent = holidayData.formatted;
+            
+            // حفظ في قاعدة البيانات
+            database.ref('holidayData').set(holidayData)
+                .then(() => {
+                    showAlert('تم تحديث التاريخ بنجاح', 'success');
+                })
+                .catch((error) => {
+                    showAlert('خطأ في تحديث التاريخ: ' + error.message, 'error');
+                });
         }
 
         // ============================================
@@ -1759,7 +2027,7 @@
                     statusBtn.addEventListener('touchstart', (e) => {
                         e.stopPropagation();
                         e.preventDefault();
-                        showStatusDropdown(e, provinceName);
+                        handleStatusButtonTap(e, provinceName);
                     }, { passive: false });
                 } else {
                     statusBtn.onclick = (e) => {
@@ -1781,24 +2049,40 @@
         }
 
         // ============================================
+        // وظيفة: التعامل مع النقر على زر الحالة (للمسات)
+        // ============================================
+        function handleStatusButtonTap(e, provinceName) {
+            e.stopPropagation();
+            e.preventDefault();
+            
+            // إذا كانت القائمة مفتوحة، نغلقها
+            if (dropdownVisible && currentStatusProvince === provinceName) {
+                hideStatusDropdown();
+            } else {
+                // إذا كانت مغلقة، نفتحها
+                showStatusDropdown(e, provinceName);
+            }
+        }
+
+        // ============================================
         // وظيفة: الحصول على أيقونة الحالة
         // ============================================
         function getStatusIcon(statusIndex) {
             const icons = [
-                'fas fa-check-circle',
-                'fas fa-exclamation-triangle',
-                'fas fa-question-circle',
-                'fas fa-times-circle',
-                'fas fa-chart-pie',
-                'fas fa-chart-pie',
-                'fas fa-chart-pie',
-                'fas fa-chart-pie',
-                'fas fa-chart-pie',
-                'fas fa-chart-pie',
-                'fas fa-chart-pie',
-                'fas fa-chart-pie',
-                'fas fa-chart-pie',
-                'fas fa-chart-pie'
+                'fas fa-times-circle',      // لا يوجد عطلة (أحمر)
+                'fas fa-exclamation-triangle', // نسبة قليلة
+                'fas fa-question-circle',   // ممكن جدا
+                'fas fa-check-circle',      // تم التعطيل (أخضر)
+                'fas fa-chart-pie',         // 10٪
+                'fas fa-chart-pie',         // 20٪
+                'fas fa-chart-pie',         // 30٪
+                'fas fa-chart-pie',         // 40٪
+                'fas fa-chart-pie',         // 50٪
+                'fas fa-chart-pie',         // 60٪
+                'fas fa-chart-pie',         // 70٪
+                'fas fa-chart-pie',         // 80٪
+                'fas fa-chart-pie',         // 90٪
+                'fas fa-chart-pie'          // 100٪
             ];
             return icons[statusIndex] || 'fas fa-circle';
         }
@@ -2005,15 +2289,16 @@
             
             showLoading('جاري حفظ التحديثات...');
             
+            // حفظ بيانات المحافظات
             database.ref('provinces').set(provincesData)
                 .then(() => {
-                    hideLoading();
-                    showAlert('تم حفظ التحديثات بنجاح', 'success');
-                    
                     // إزالة تأثير النبض من زر الحفظ
                     const saveBtn = document.getElementById('saveBtn');
                     saveBtn.classList.remove('pulse');
                     saveBtn.innerHTML = '<i class="fas fa-save"></i> حفظ التحديثات';
+                    
+                    hideLoading();
+                    showAlert('تم حفظ التحديثات بنجاح', 'success');
                 })
                 .catch((error) => {
                     hideLoading();
@@ -2085,6 +2370,30 @@
                 database.ref('userFavorites/' + currentUser.uid).on('value', (snapshot) => {
                     userFavorites = snapshot.val() || [];
                     renderProvinces();
+                });
+            }
+            
+            // الاستماع لتحديثات بيانات العطل
+            database.ref('holidayData').on('value', (snapshot) => {
+                if (snapshot.exists()) {
+                    holidayData = snapshot.val();
+                    document.getElementById('holidayDateDisplay').textContent = holidayData.formatted;
+                    
+                    // تحديث العرض للمالك
+                    if (isOwner) {
+                        document.getElementById('currentDateDisplay').textContent = holidayData.formatted;
+                    }
+                }
+            });
+            
+            // الاستماع لتحديثات عدد المستخدمين (للمالك فقط)
+            if (isOwner) {
+                database.ref('users').on('value', (snapshot) => {
+                    if (snapshot.exists()) {
+                        const users = snapshot.val();
+                        totalUsers = Object.keys(users).length;
+                        document.getElementById('usersCountText').textContent = totalUsers + ' مستخدم';
+                    }
                 });
             }
         }
@@ -2245,12 +2554,7 @@
             if (e.ctrlKey && e.shiftKey && e.key === 'L') {
                 logout();
             }
-            
-            // ESC لإغلاق القائمة المنسدلة
-            if (e.key === 'Escape' && dropdownVisible) {
-                hideStatusDropdown();
-            }
         });
     </script>
 </body>
-  </html>
+</html>
